@@ -1,0 +1,47 @@
+import tkinter as tk
+from tkinter import messagebox # Thêm thư viện để dùng popup
+from datetime import datetime  # Thêm thư viện để lấy thời gian
+def xu_ly_du_lieu():
+    # 1. Lấy dữ liệu từ ô nhập bằng phương thức .get()    
+    mssv = o_nhap_ma_sv.get()
+    ho_ten = o_nhap_ho_ten.get()
+    # Kiểm tra xem MSSV có phải là số hay không
+    if not mssv.isdigit():
+        messagebox.showerror("Lỗi!","Mã sinh viên phải là số!")
+        return # Dừng hàm tại đây, không xử lý tiếp
+    # 2. In ra Terminal để lập trình viên kiểm tra
+    # In thời gian hiện tại lúc nhấn nút
+    thoi_gian_hien_tai = datetime.now().strftime("%H:%M:%S")
+    print(f"[{thoi_gian_hien_tai}] MSSV: {mssv} - Họ tên: {ho_ten}")
+    # 3. Cập nhật trực tiếp lên giao diện (Label kết quả)
+    if ho_ten != "":
+        nhan_ket_qua.config(text=f"Thành công đã nhận dữ liệu của {ho_ten}", fg="green")
+    else:
+        messagebox.showwarning("Chú ý","Không để trống thông tin sinh viên!")
+        return
+    # --- Xóa trắng ô nhập ---
+    o_nhap_ma_sv.delete(0, tk.END)
+    o_nhap_ho_ten.delete(0, tk.END)
+root = tk.Tk()
+root.title("Quản lý Sinh viên - UHL")
+root.geometry("400x350")
+root.columnconfigure(1, weight=1)
+
+# --- PHẦN GIAO DIỆN (Giữ nguyên từ Lộ trình 3) ---
+tk.Label(root, text="Mã sinh viên:").grid(row=0, column=0, padx=10, pady=10, sticky="w")
+o_nhap_ma_sv = tk.Entry(root)
+o_nhap_ma_sv.grid(row=0, column=1, padx=10, pady=10, sticky="ew")
+
+tk.Label(root, text="Họ và tên:").grid(row=1, column=0, padx=10, pady=10, sticky="w")
+o_nhap_ho_ten = tk.Entry(root)
+o_nhap_ho_ten.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
+
+# --- PHẦN MỚI: NÚT BẤM VÀ KẾT QUẢ ---
+
+# Nút bấm có tham số 'command' kết nối tới hàm xử lý
+nut_xac_nhan = tk.Button(root, text="Xác nhận điểm danh", command=xu_ly_du_lieu)
+nut_xac_nhan.grid(row=2, column=0, columnspan=2, pady=10)
+# Nhãn hiển thị kết quả ngay trên giao diện
+nhan_ket_qua = tk.Label(root, text="Chưa có dữ liệu", font=("Arial", 10, "italic"))
+nhan_ket_qua.grid(row=3, column=0, columnspan=2, pady=20)
+root.mainloop()
